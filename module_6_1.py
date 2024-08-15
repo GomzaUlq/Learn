@@ -18,7 +18,7 @@ class Animal:
             print(f'{self.name_animal} съел {food.name_plant}')
         else:
             self.alive = False
-            print(f'{self.name_animal} съел {food.name_plant}')
+            print(f'{self.name_animal} не съел {food.name_plant}')
 
 
 class Mammal(Animal):
@@ -52,3 +52,4 @@ a1.eat(p1)
 a2.eat(p2)
 print(a1.alive)
 print(a2.fed)
+
