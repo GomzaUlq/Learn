@@ -22,4 +22,4 @@ print(f'Команды решили {score_1} и {score_2}')
 
 print(f'Результат битвы: {result}')
 print(f'Сегодня было решено {score_1 + score_2}',
-      f'в среднем по {(team1_time + team2_time) // (score_1 + score_2)} секунды на задачу!')
+      f'в среднем по {round((team1_time + team2_time) / (score_1 + score_2), 2)} секунды на задачу!')
