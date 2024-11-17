@@ -6,11 +6,12 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 import asyncio
 from crude_functions import *
 
-api = ''
+api = '7825912653:AAHukqqWUFtLcxC8GYn-zSBKoOyCXdM228U'
 bot = Bot(token=api)
 dp = Dispatcher(bot, storage=MemoryStorage())
 kb = ReplyKeyboardMarkup(
     keyboard=[
+        [KeyboardButton(text='Регистрация')],
         [
             KeyboardButton(text='Рассчитать'),
             KeyboardButton(text='Информация'),
@@ -59,6 +60,46 @@ async def get_buying_list(message):
 async def send_confirm_message(call):
     await call.message.answer("Вы успешно приобрели продукт!")
     await call.answer()
+
+
+class RegistrationState(StatesGroup):
+    username = State()
+    email = State()
+    age = State()
+    balance = 1000
+
+
+@dp.message_handler(text='Регистрация')
+async def sign_up(message):
+    await message.answer('Введите имя пользователя(только латинский алфавит):')
+    await RegistrationState.username.set()
+
+
+@dp.message_handler(state=RegistrationState.username)
+async def set_username(message, state):
+    if not is_included(message.text):
+        await state.update_data(username=message.text)
+        await message.answer('Введите свой email: ')
+        await RegistrationState.email.set()
+    else:
+        await message.answer('Пользователь существует, введите другое имя')
+        await RegistrationState.username.set()
+
+
+@dp.message_handler(state=RegistrationState.email)
+async def set_email(message, state):
+    await state.update_data(email=message.text)
+    await message.answer('Введите свой возраст: ')
+    await RegistrationState.age.set()
+
+
+@dp.message_handler(state=RegistrationState.age)
+async def set_age(message, state):
+    await state.update_data(age=message.text)
+    data = await state.get_data()
+    add_user(data['username'], data['email'], data['age'])
+    await state.finish()
+    await message.answer(f'{data["username"]}, вы успешно зарегистрированы')
 
 
 class UserState(StatesGroup):
