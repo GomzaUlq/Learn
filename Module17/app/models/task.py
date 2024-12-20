@@ -3,7 +3,6 @@ from sqlalchemy import Column, ForeignKey, Integer, String, Boolean
 from sqlalchemy.orm import relationship
 
 
-
 class Task(Base):
     __tablename__ = "tasks"
     __table_args__ = {'extend_existing': True}
